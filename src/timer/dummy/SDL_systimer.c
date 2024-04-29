@@ -41,7 +41,7 @@ SDL_TicksQuit(void)
     ticks_started = SDL_FALSE;
 }
 
-Uint32
+double
 SDL_GetTicks(void)
 {
     if (!ticks_started) {
@@ -52,20 +52,20 @@ SDL_GetTicks(void)
     return 0;
 }
 
-Uint64
+double
 SDL_GetPerformanceCounter(void)
 {
     return SDL_GetTicks();
 }
 
-Uint64
+double
 SDL_GetPerformanceFrequency(void)
 {
-    return 1000;
+    return 1000.0;
 }
 
 void
-SDL_Delay(Uint32 ms)
+SDL_Delay(double ms)
 {
     SDL_Unsupported();
 }

@@ -62,7 +62,7 @@
 #if HAVE_CLOCK_GETTIME
 static struct timespec start_ts;
 #elif defined(__APPLE__)
-static uint64_t start_mach;
+static double start_mach;
 mach_timebase_info_data_t mach_base_info;
 #endif
 static SDL_bool has_monotonic_time = SDL_FALSE;
@@ -100,10 +100,10 @@ SDL_TicksQuit(void)
     ticks_started = SDL_FALSE;
 }
 
-Uint32
+double
 SDL_GetTicks(void)
 {
-    Uint32 ticks;
+    double ticks;
     if (!ticks_started) {
         SDL_TicksInit();
     }
@@ -112,10 +112,10 @@ SDL_GetTicks(void)
 #if HAVE_CLOCK_GETTIME
         struct timespec now;
         clock_gettime(SDL_MONOTONIC_CLOCK, &now);
-        ticks = (Uint32)((now.tv_sec - start_ts.tv_sec) * 1000 + (now.tv_nsec - start_ts.tv_nsec) / 1000000);
+        ticks = (double)((now.tv_sec - start_ts.tv_sec) * 1000.0 + (now.tv_nsec - start_ts.tv_nsec) * 0.000001);
 #elif defined(__APPLE__)
-        uint64_t now = mach_absolute_time();
-        ticks = (Uint32)((((now - start_mach) * mach_base_info.numer) / mach_base_info.denom) / 1000000);
+        double_t now = mach_absolute_time();
+        ticks = (double)((((now - start_mach) * mach_base_info.numer) / mach_base_info.denom) * 0.000001);
 #else
         SDL_assert(SDL_FALSE);
         ticks = 0;
@@ -124,15 +124,15 @@ SDL_GetTicks(void)
         struct timeval now;
 
         gettimeofday(&now, NULL);
-        ticks = (Uint32)((now.tv_sec - start_tv.tv_sec) * 1000 + (now.tv_usec - start_tv.tv_usec) / 1000);
+        ticks = (double)((now.tv_sec - start_tv.tv_sec) * 1000.0 + (now.tv_usec - start_tv.tv_usec) * 0.001);
     }
     return (ticks);
 }
 
-Uint64
+double
 SDL_GetPerformanceCounter(void)
 {
-    Uint64 ticks;
+    double ticks;
     if (!ticks_started) {
         SDL_TicksInit();
     }
@@ -143,26 +143,26 @@ SDL_GetPerformanceCounter(void)
 
         clock_gettime(SDL_MONOTONIC_CLOCK, &now);
         ticks = now.tv_sec;
-        ticks *= 1000000000;
+        ticks *= 1000000000.0;
         ticks += now.tv_nsec;
 #elif defined(__APPLE__)
         ticks = mach_absolute_time();
 #else
         SDL_assert(SDL_FALSE);
-        ticks = 0;
+        ticks = 0.0;
 #endif
     } else {
         struct timeval now;
 
         gettimeofday(&now, NULL);
         ticks = now.tv_sec;
-        ticks *= 1000000;
+        ticks *= 1000000.0;
         ticks += now.tv_usec;
     }
     return (ticks);
 }
 
-Uint64
+double
 SDL_GetPerformanceFrequency(void)
 {
     if (!ticks_started) {
@@ -171,20 +171,20 @@ SDL_GetPerformanceFrequency(void)
 
     if (has_monotonic_time) {
 #if HAVE_CLOCK_GETTIME
-        return 1000000000;
+        return 1000000000.0;
 #elif defined(__APPLE__)
-        Uint64 freq = mach_base_info.denom;
-        freq *= 1000000000;
+        double freq = mach_base_info.denom;
+        freq *= 1000000000.0;
         freq /= mach_base_info.numer;
         return freq;
 #endif
     } 
         
-    return 1000000;
+    return 1000000.0;
 }
 
 void
-SDL_Delay(Uint32 ms)
+SDL_Delay(double ms)
 {
     int was_error;
 
@@ -192,13 +192,13 @@ SDL_Delay(Uint32 ms)
     struct timespec elapsed, tv;
 #else
     struct timeval tv;
-    Uint32 then, now, elapsed;
+    double then, now, elapsed;
 #endif
 
     /* Set the timeout interval */
 #if HAVE_NANOSLEEP
-    elapsed.tv_sec = ms / 1000;
-    elapsed.tv_nsec = (ms % 1000) * 1000000;
+    elapsed.tv_sec = ms * 0.001;
+    elapsed.tv_nsec = (ms % 1000.0) * 1000000.0;
 #else
     then = SDL_GetTicks();
 #endif
@@ -218,8 +218,8 @@ SDL_Delay(Uint32 ms)
             break;
         }
         ms -= elapsed;
-        tv.tv_sec = ms / 1000;
-        tv.tv_usec = (ms % 1000) * 1000;
+        tv.tv_sec = ms * 0.001;
+        tv.tv_usec = (ms % 1000.0) * 1000.0;
 
         was_error = select(0, NULL, NULL, NULL, &tv);
 #endif /* HAVE_NANOSLEEP */

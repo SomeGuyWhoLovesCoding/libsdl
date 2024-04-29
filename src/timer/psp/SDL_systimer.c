@@ -51,38 +51,38 @@ SDL_TicksQuit(void)
     ticks_started = SDL_FALSE;
 }
 
-Uint32 SDL_GetTicks(void)
+double SDL_GetTicks(void)
 {
     if (!ticks_started) {
         SDL_TicksInit();
     }
 
     struct timeval now;
-    Uint32 ticks;
+    double ticks;
 
     gettimeofday(&now, NULL);
-    ticks=(now.tv_sec-start.tv_sec)*1000+(now.tv_usec-start.tv_usec)/1000;
+    ticks=(now.tv_sec-start.tv_sec)*1000.0+(now.tv_usec-start.tv_usec)*0.001;
     return(ticks);
 }
 
-Uint64
+double
 SDL_GetPerformanceCounter(void)
 {
     return SDL_GetTicks();
 }
 
-Uint64
+double
 SDL_GetPerformanceFrequency(void)
 {
-    return 1000;
+    return 1000.0;
 }
 
-void SDL_Delay(Uint32 ms)
+void SDL_Delay(double ms)
 {
-    const Uint32 max_delay = 0xffffffffUL / 1000;
+    const double max_delay = 0xffffffffUL * 0.001;
     if(ms > max_delay)
         ms = max_delay;
-    sceKernelDelayThreadCB(ms * 1000);
+    sceKernelDelayThreadCB(ms * 1000.0);
 }
 
 #endif /* SDL_TIMERS_PSP */

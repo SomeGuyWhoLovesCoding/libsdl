@@ -33,8 +33,8 @@ typedef struct _SDL_Timer
     int timerID;
     SDL_TimerCallback callback;
     void *param;
-    Uint32 interval;
-    Uint32 scheduled;
+    double interval;
+    double scheduled;
     SDL_atomic_t canceled;
     struct _SDL_Timer *next;
 } SDL_Timer;
@@ -105,7 +105,7 @@ SDL_TimerThread(void *_data)
     SDL_Timer *current;
     SDL_Timer *freelist_head = NULL;
     SDL_Timer *freelist_tail = NULL;
-    Uint32 tick, now, interval, delay;
+    double tick, now, interval, delay;
 
     /* Threaded timer loop:
      *  1. Queue timers added by other threads
@@ -276,7 +276,7 @@ SDL_TimerQuit(void)
 }
 
 SDL_TimerID
-SDL_AddTimer(Uint32 interval, SDL_TimerCallback callback, void *param)
+SDL_AddTimer(double interval, SDL_TimerCallback callback, void *param)
 {
     SDL_TimerData *data = &SDL_timer_data;
     SDL_Timer *timer;
