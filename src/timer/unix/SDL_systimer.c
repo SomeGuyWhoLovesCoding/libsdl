@@ -184,7 +184,7 @@ SDL_GetPerformanceFrequency(void)
 }
 
 void
-SDL_Delay(Uint32 ms)
+SDL_Delay(double ms)
 {
     int was_error;
 
@@ -192,7 +192,7 @@ SDL_Delay(Uint32 ms)
     struct timespec elapsed, tv;
 #else
     struct timeval tv;
-    Uint32 then, now, elapsed;
+    double then, now, elapsed;
 #endif
 
     /* Set the timeout interval */

@@ -70,7 +70,7 @@ SDL_GetPerformanceFrequency(void)
 }
 
 void
-SDL_Delay(Uint32 ms)
+SDL_Delay(double ms)
 {
     snooze(ms * 1000);
 }

@@ -77,7 +77,7 @@ SDL_GetPerformanceFrequency(void)
     return 1000;
 }
 
-void SDL_Delay(Uint32 ms)
+void SDL_Delay(double ms)
 {
     const Uint32 max_delay = 0xffffffffUL / 1000;
     if(ms > max_delay)

@@ -68,7 +68,7 @@ extern DECLSPEC Uint64 SDLCALL SDL_GetPerformanceFrequency(void);
 /**
  * \brief Wait a specified number of milliseconds before returning.
  */
-extern DECLSPEC void SDLCALL SDL_Delay(Uint32 ms);
+extern DECLSPEC void SDLCALL SDL_Delay(double ms);
 
 /**
  *  Function prototype for the timer callback function.
@@ -90,7 +90,7 @@ typedef int SDL_TimerID;
  *
  * \return A timer ID, or 0 when an error occurs.
  */
-extern DECLSPEC SDL_TimerID SDLCALL SDL_AddTimer(Uint32 interval,
+extern DECLSPEC SDL_TimerID SDLCALL SDL_AddTimer(double interval,
                                                  SDL_TimerCallback callback,
                                                  void *param);
 

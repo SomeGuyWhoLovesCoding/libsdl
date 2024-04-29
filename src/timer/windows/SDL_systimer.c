@@ -166,7 +166,7 @@ SDL_GetPerformanceFrequency(void)
 }
 
 void
-SDL_Delay(Uint32 ms)
+SDL_Delay(double ms)
 {
     /* Sleep() is not publicly available to apps in early versions of WinRT.
      *
