@@ -47,32 +47,32 @@ SDL_TicksQuit(void)
     ticks_started = SDL_FALSE;
 }
 
-double
+Uint32
 SDL_GetTicks(void)
 {
     if (!ticks_started) {
         SDL_TicksInit();
     }
 
-    return ((system_time() - start) * 0.001);
+    return ((system_time() - start) / 1000);
 }
 
-double
+Uint64
 SDL_GetPerformanceCounter(void)
 {
     return system_time();
 }
 
-double
+Uint64
 SDL_GetPerformanceFrequency(void)
 {
-    return 1000000.0;
+    return 1000000;
 }
 
 void
-SDL_Delay(double ms)
+SDL_Delay(Uint32 ms)
 {
-    snooze(ms * 1000.0);
+    snooze(ms * 1000);
 }
 
 #endif /* SDL_TIMER_HAIKU */
